@@ -39,7 +39,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="home" className="relative h-screen overflow-hidden">
+    <section id="home" className="relative w-full h-screen overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -47,32 +47,33 @@ export default function Hero() {
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
         >
-          {/* Background Image */}
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
               backgroundImage: `url('${slide.image}')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/50" />
           </div>
 
           {/* Content */}
-          <div className="relative h-full flex items-center">
-            <div className="container mx-auto px-4">
+          <div className="relative h-full flex items-center w-full">
+            <div className="container mx-auto px-4 w-full">
               <div className="max-w-3xl">
-                <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight animate-fade-in-up">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight animate-fade-in-up">
                   {slide.title}
                 </h1>
                 <p
-                  className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed animate-fade-in-up"
+                  className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 md:mb-8 leading-relaxed animate-fade-in-up"
                   style={{ animationDelay: "0.2s" }}
                 >
                   {slide.description}
                 </p>
                 <Link
                   href={slide.href}
-                  className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 rounded-lg font-semibold hover:bg-accent/90 transition-all hover:gap-4 animate-fade-in-up"
+                  className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-accent/90 transition-all hover:gap-4 animate-fade-in-up text-sm md:text-base"
                   style={{ animationDelay: "0.4s" }}
                 >
                   {slide.cta}
@@ -85,7 +86,7 @@ export default function Hero() {
       ))}
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+      <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
         {slides.map((_, index) => (
           <button
             key={index}

@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect, useRef } from "react"
 import {
   Globe,
@@ -51,6 +50,7 @@ import {
   Truck,
   Briefcase,
   Rocket,
+  X,
 } from "lucide-react"
 
 const categories = [
@@ -67,15 +67,13 @@ const services = [
   {
     icon: Globe,
     title: "Digital Marketing & Branding",
-    description:
-      "Comprehensive digital marketing strategies, including SEO, social media management, and branding solutions.",
+    description: "Comprehensive digital marketing strategies, including SEO, social media management, and branding solutions.",
     category: "digital",
   },
   {
     icon: Smartphone,
     title: "Social Media Management",
-    description:
-      "Manage and grow your social media presence with engaging content, account management, and performance analytics.",
+    description: "Manage and grow your social media presence with engaging content, account management, and performance analytics.",
     category: "digital",
   },
   {
@@ -102,7 +100,6 @@ const services = [
     description: "Professional copywriting services that engage your audience and drive action.",
     category: "digital",
   },
-
   // Design & Media
   {
     icon: Palette,
@@ -218,7 +215,6 @@ const services = [
     description: "Custom design and production of office wear for a professional look.",
     category: "design",
   },
-
   // IT Solutions
   {
     icon: Laptop,
@@ -304,7 +300,6 @@ const services = [
     description: "Setup and customization of WordPress services for your business needs.",
     category: "it",
   },
-
   // Security
   {
     icon: DoorOpen,
@@ -354,7 +349,6 @@ const services = [
     description: "Professional installation of CCTV surveillance systems.",
     category: "security",
   },
-
   // Business Services
   {
     icon: FileSignature,
@@ -400,17 +394,27 @@ const services = [
   },
 ]
 
+const galleryImages = [
+  { id: 1, alt: "Instagram Management", src: "/images/instagram.jpg" },
+  { id: 2, alt: "Design & Creative Services", src: "/images/startup_services.jpg" },
+  { id: 3, alt: "IT Solutions & Development", src: "/images/get_a_website_now.jpg" },
+  { id: 4, alt: "Security Systems", src: "/images/Monthly_Graphics_Design.jpg" },
+  { id: 5, alt: "Business Services", src: "/images/register_your_business.jpg" },
+  { id: 6, alt: "Professional Branding", src: "/images/town_cryer.jpg" },
+]
+
 export default function Services() {
   const [activeCategory, setActiveCategory] = useState("all")
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 })
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({})
   const containerRef = useRef<HTMLDivElement>(null)
+  const servicesRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleFilterServices = (event: CustomEvent) => {
       setActiveCategory(event.detail)
     }
-
     window.addEventListener("filterServices", handleFilterServices as EventListener)
     return () => {
       window.removeEventListener("filterServices", handleFilterServices as EventListener)
@@ -420,15 +424,18 @@ export default function Services() {
   useEffect(() => {
     const activeButton = categoryRefs.current[activeCategory]
     const container = containerRef.current
-
     if (activeButton && container) {
       const containerRect = container.getBoundingClientRect()
       const buttonRect = activeButton.getBoundingClientRect()
-
       setSliderStyle({
         left: buttonRect.left - containerRect.left,
         width: buttonRect.width,
       })
+      if (servicesRef.current) {
+        setTimeout(() => {
+          servicesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+        }, 100)
+      }
     }
   }, [activeCategory])
 
@@ -443,14 +450,13 @@ export default function Services() {
   }
 
   return (
-    <section id="services" className="py-24 bg-background">
+    <section id="services" className="py-12 md:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-4">Our Services</h2>
-          <p className="text-xl text-muted-foreground">Comprehensive Solutions for Your Business Needs</p>
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2 md:mb-4">Our Services</h2>
+          <p className="text-base md:text-lg text-muted-foreground">Comprehensive Solutions for Your Business Needs</p>
         </div>
-
-        <div ref={containerRef} className="relative flex flex-wrap justify-center gap-3 mb-12">
+        <div ref={containerRef} className="relative flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12 px-2">
           <div
             className="absolute h-10 bg-accent rounded-full transition-all duration-300 ease-out -z-0 hidden md:block"
             style={{
@@ -459,7 +465,6 @@ export default function Services() {
               top: "0",
             }}
           />
-
           {categories.map((category) => (
             <button
               key={category.id}
@@ -467,7 +472,7 @@ export default function Services() {
                 categoryRefs.current[category.id] = el
               }}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all relative z-10 ${
+              className={`px-3 md:px-6 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium transition-all relative z-10 flex-shrink-0 ${
                 activeCategory === category.id
                   ? "bg-accent text-accent-foreground shadow-md"
                   : "bg-card text-card-foreground hover:bg-secondary border border-border"
@@ -478,30 +483,306 @@ export default function Services() {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service, index) => {
+        {/* First Services Grid (0-4) */}
+        <div ref={servicesRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+          {filteredServices.slice(0, 5).map((service, index) => {
             const Icon = service.icon
             return (
               <div
                 key={index}
-                className="bg-card border border-border rounded-lg p-6 hover:border-accent hover:shadow-lg transition-all group"
+                className="bg-card border border-border rounded-lg p-4 md:p-6 hover:border-accent hover:shadow-lg transition-all group"
               >
-                <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent transition-colors">
-                  <Icon className="w-6 h-6 text-foreground group-hover:text-accent-foreground transition-colors" />
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-secondary rounded-lg flex items-center justify-center mb-3 md:mb-4 group-hover:bg-accent transition-colors">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground group-hover:text-accent-foreground transition-colors" />
                 </div>
-                <h3 className="text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
-                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.description}</p>
+                <h3 className="text-base md:text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">
+                  {service.description}
+                </p>
                 <button
                   onClick={() => handleWhatsApp(service.title)}
-                  className="inline-flex items-center gap-2 text-accent hover:text-accent/80 text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2 text-accent hover:text-accent/80 text-xs md:text-sm font-medium transition-colors"
                 >
-                  <MessageCircle size={16} />
+                  <MessageCircle size={14} className="md:w-4 md:h-4" />
                   Request Quote
                 </button>
               </div>
             )
           })}
         </div>
+
+        {/* First Image */}
+        <div className="mb-8 md:mb-12">
+          <div
+            onClick={() => setSelectedImage(galleryImages[0].src)}
+            className="relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer group bg-secondary border border-border hover:border-accent transition-all max-w-xs mx-auto"
+          >
+            <img
+              src={galleryImages[0].src}
+              alt={galleryImages[0].alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium">
+                View
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Second Services Grid (5-9) */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+          {filteredServices.slice(5, 10).map((service, index) => {
+            const Icon = service.icon
+            return (
+              <div
+                key={index + 5}
+                className="bg-card border border-border rounded-lg p-4 md:p-6 hover:border-accent hover:shadow-lg transition-all group"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-secondary rounded-lg flex items-center justify-center mb-3 md:mb-4 group-hover:bg-accent transition-colors">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground group-hover:text-accent-foreground transition-colors" />
+                </div>
+                <h3 className="text-base md:text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">
+                  {service.description}
+                </p>
+                <button
+                  onClick={() => handleWhatsApp(service.title)}
+                  className="inline-flex items-center gap-2 text-accent hover:text-accent/80 text-xs md:text-sm font-medium transition-colors"
+                >
+                  <MessageCircle size={14} className="md:w-4 md:h-4" />
+                  Request Quote
+                </button>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Second Image */}
+        <div className="mb-8 md:mb-12">
+          <div
+            onClick={() => setSelectedImage(galleryImages[1].src)}
+            className="relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer group bg-secondary border border-border hover:border-accent transition-all max-w-xs mx-auto"
+          >
+            <img
+              src={galleryImages[1].src}
+              alt={galleryImages[1].alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium">
+                View
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Third Services Grid (10-14) */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+          {filteredServices.slice(10, 15).map((service, index) => {
+            const Icon = service.icon
+            return (
+              <div
+                key={index + 10}
+                className="bg-card border border-border rounded-lg p-4 md:p-6 hover:border-accent hover:shadow-lg transition-all group"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-secondary rounded-lg flex items-center justify-center mb-3 md:mb-4 group-hover:bg-accent transition-colors">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground group-hover:text-accent-foreground transition-colors" />
+                </div>
+                <h3 className="text-base md:text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">
+                  {service.description}
+                </p>
+                <button
+                  onClick={() => handleWhatsApp(service.title)}
+                  className="inline-flex items-center gap-2 text-accent hover:text-accent/80 text-xs md:text-sm font-medium transition-colors"
+                >
+                  <MessageCircle size={14} className="md:w-4 md:h-4" />
+                  Request Quote
+                </button>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Third Image */}
+        <div className="mb-8 md:mb-12">
+          <div
+            onClick={() => setSelectedImage(galleryImages[2].src)}
+            className="relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer group bg-secondary border border-border hover:border-accent transition-all max-w-xs mx-auto"
+          >
+            <img
+              src={galleryImages[2].src}
+              alt={galleryImages[2].alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium">
+                View
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Fourth Services Grid (15-19) */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+          {filteredServices.slice(15, 20).map((service, index) => {
+            const Icon = service.icon
+            return (
+              <div
+                key={index + 15}
+                className="bg-card border border-border rounded-lg p-4 md:p-6 hover:border-accent hover:shadow-lg transition-all group"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-secondary rounded-lg flex items-center justify-center mb-3 md:mb-4 group-hover:bg-accent transition-colors">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground group-hover:text-accent-foreground transition-colors" />
+                </div>
+                <h3 className="text-base md:text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">
+                  {service.description}
+                </p>
+                <button
+                  onClick={() => handleWhatsApp(service.title)}
+                  className="inline-flex items-center gap-2 text-accent hover:text-accent/80 text-xs md:text-sm font-medium transition-colors"
+                >
+                  <MessageCircle size={14} className="md:w-4 md:h-4" />
+                  Request Quote
+                </button>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Fourth Image */}
+        <div className="mb-8 md:mb-12">
+          <div
+            onClick={() => setSelectedImage(galleryImages[3].src)}
+            className="relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer group bg-secondary border border-border hover:border-accent transition-all max-w-xs mx-auto"
+          >
+            <img
+              src={galleryImages[3].src}
+              alt={galleryImages[3].alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium">
+                View
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Fifth Services Grid (20-24) */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+          {filteredServices.slice(20, 25).map((service, index) => {
+            const Icon = service.icon
+            return (
+              <div
+                key={index + 20}
+                className="bg-card border border-border rounded-lg p-4 md:p-6 hover:border-accent hover:shadow-lg transition-all group"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-secondary rounded-lg flex items-center justify-center mb-3 md:mb-4 group-hover:bg-accent transition-colors">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground group-hover:text-accent-foreground transition-colors" />
+                </div>
+                <h3 className="text-base md:text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">
+                  {service.description}
+                </p>
+                <button
+                  onClick={() => handleWhatsApp(service.title)}
+                  className="inline-flex items-center gap-2 text-accent hover:text-accent/80 text-xs md:text-sm font-medium transition-colors"
+                >
+                  <MessageCircle size={14} className="md:w-4 md:h-4" />
+                  Request Quote
+                </button>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Fifth Image */}
+        <div className="mb-8 md:mb-12">
+          <div
+            onClick={() => setSelectedImage(galleryImages[4].src)}
+            className="relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer group bg-secondary border border-border hover:border-accent transition-all max-w-xs mx-auto"
+          >
+            <img
+              src={galleryImages[4].src}
+              alt={galleryImages[4].alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium">
+                View
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Sixth Services Grid (25-29) */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+          {filteredServices.slice(25, 30).map((service, index) => {
+            const Icon = service.icon
+            return (
+              <div
+                key={index + 25}
+                className="bg-card border border-border rounded-lg p-4 md:p-6 hover:border-accent hover:shadow-lg transition-all group"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-secondary rounded-lg flex items-center justify-center mb-3 md:mb-4 group-hover:bg-accent transition-colors">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-foreground group-hover:text-accent-foreground transition-colors" />
+                </div>
+                <h3 className="text-base md:text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">
+                  {service.description}
+                </p>
+                <button
+                  onClick={() => handleWhatsApp(service.title)}
+                  className="inline-flex items-center gap-2 text-accent hover:text-accent/80 text-xs md:text-sm font-medium transition-colors"
+                >
+                  <MessageCircle size={14} className="md:w-4 md:h-4" />
+                  Request Quote
+                </button>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Sixth Image */}
+        <div className="mb-8 md:mb-12">
+          <div
+            onClick={() => setSelectedImage(galleryImages[5].src)}
+            className="relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer group bg-secondary border border-border hover:border-accent transition-all max-w-xs mx-auto"
+          >
+            <img
+              src={galleryImages[5].src}
+              alt={galleryImages[5].alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium">
+                View
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Image Modal */}
+        {selectedImage && (
+          <div
+            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-2 md:p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div className="relative max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+              <img src={selectedImage} alt="Fullscreen view" className="w-full h-auto rounded-lg" />
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-2 right-2 md:top-4 md:right-4 bg-accent text-accent-foreground rounded-full p-1.5 md:p-2 hover:bg-accent/90 transition-all"
+                aria-label="Close image"
+              >
+                <X className="w-5 h-5 md:w-6 md:h-6" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
