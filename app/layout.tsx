@@ -152,7 +152,7 @@ export const metadata: Metadata = {
       "🚀 Transform Your Business Today! Professional Web Development from GHS 1,500 | Digital Marketing & SEO | Graphics Design | CCTV Installation | Business Registration | 50+ Services Under One Roof. FREE Website Audit! Call +233 24 279 9990 📞",
     images: [
       {
-        url: "https://adamantisstudios.netlify.app/images/popup.jpg",
+        url: "https://adamantisstudios.netlify.app/images/preview.jpg",
         width: 1200,
         height: 630,
         alt: "Adamantis Studios - Your Complete Business Solutions Partner in Ghana",
@@ -168,7 +168,7 @@ export const metadata: Metadata = {
     title: "Adamantis Studios - 50+ Marketing, IT & Security Services | Ghana's #1 Business Solutions",
     description:
       "🚀 Transform Your Business! Web Development from GHS 1,500 | Digital Marketing | Graphics Design | CCTV | Business Registration | 50+ Services. FREE Audit! 📞 +233 24 279 9990",
-    images: ["https://adamantisstudios.netlify.app/images/popup.jpg"],
+    images: ["https://adamantisstudios.netlify.app/images/preview.jpg"],
     creator: "@AdamantisStudios",
   },
   verification: {
@@ -191,7 +191,7 @@ export default function RootLayout({
     name: "Adamantis Studios",
     description:
       "Ghana's premier holistic marketing, IT solutions, and security services provider offering 50+ professional services including digital marketing, web development, graphics design, CCTV installation, and business services.",
-    image: "https://adamantisstudios.netlify.app/images/popup.jpg",
+    image: "https://adamantisstudios.netlify.app/images/preview.jpg",
     logo: "https://adamantisstudios.netlify.app/images/logo.png",
     url: "https://adamantisstudios.netlify.app",
     telephone: "+233242799990",
