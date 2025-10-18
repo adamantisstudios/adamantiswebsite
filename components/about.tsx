@@ -33,16 +33,14 @@ export default function About() {
             </div>
 
             <div className="relative aspect-video rounded-lg overflow-hidden bg-muted shadow-lg">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/bxviQi0GoiI"
-                title="Adamantis Studios Video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0"
-              />
+              <video
+                controls
+                poster="/images/adamantis_introvideo_poster.jpg"
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src="/images/adamantis_introvideo.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         </div>

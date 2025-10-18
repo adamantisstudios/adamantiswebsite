@@ -39,7 +39,7 @@ export default function PromoPopup() {
         <div className="p-6">
           <div className="relative w-full h-64 mb-4 rounded-lg overflow-hidden">
             <Image
-              src="/images/popup.jpg"
+              src="/images/popup2.jpg"
               alt="Promo"
               fill
               className="object-cover"
